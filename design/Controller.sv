@@ -20,25 +20,25 @@ module Controller (
     output logic MUX_final[1:0]; // 00-> Escreve no reg(ou mem) o resultado da ALU, 01-> LW, LH, LB, 10-> JAL, Branch, 11-> JALR
 ); 
 
-  logic [6:0] R_TYPE, LW, SW, BR;
+  logic [6:0] R_TYPE, I_TYPE, LW, SW, BR, JAL, JALR;
 
   assign R_TYPE = 7'b0110011;  //add,and
-  assign LW = 7'b0000011;  //lw
+  assign LW = 7'b0000011;  //lwj
   assign SW = 7'b0100011;  //sw
   assign BR = 7'b1100011;  //beq
   assign I_TYPE = 7'b0010011; // addi, andi, ori, slti
   assign JAL = 7'b1101111 // JAL
-  assign JAL_R = 7'b1100111 // JAL_R
+  assign JALR = 7'b1100111 // JAL_R
   
 
   assign ALUSrc = (Opcode == LW || Opcode == SW || Opcode == I_TYPE);
   assign MemtoReg = (Opcode == LW);
-  assign RegWrite = (Opcode == R_TYPE || Opcode == LW || Opcode == I_TYPE || Opcode == JAL || Opcode == JAL_R); // verificar se a instrucao vai escrever na memoria(usado na fowarding unit
+  assign RegWrite = (Opcode == R_TYPE || Opcode == LW || Opcode == I_TYPE || Opcode == JAL || Opcode == JALR); // verificar se a instrucao vai escrever na memoria(usado na fowarding unit
   assign MemRead = (Opcode == LW);
   assign MemWrite = (Opcode == SW);
   assign ALUOp[0] = (Opcode == BR || Opcode == JAL);
   assign MUX_final[0] = (Opcode == LW || Opcode == JALR);
-  assign MUX_final[1] = (Opcode == JAL || Opcode == BR || Opcode == JAl_R);
+  assign MUX_final[1] = (Opcode == JAL || Opcode == BR || Opcode == JAlR);
   assign ALUOp[1] = (Opcode == R_TYPE || I_TYPE || JAL);
   assign Branch = (Opcode == BR || JAL);
 endmodule
