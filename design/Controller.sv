@@ -17,7 +17,8 @@ module Controller (
     output logic MemWrite, //Data memory contents designated by the address input are replaced by the value on the Write data input.
     output logic [1:0] ALUOp,  //00: LW/SW; 01:Branch; 10: Rtype
     output logic Branch  //0: branch is not taken; 1: branch is taken
-);
+    output logic MUX_final[1:0]; // 00-> Escreve no reg(ou mem) o resultado da ALU, 01-> LW, LH, LB, 10-> JAL, Branch, 11-> JALR
+); 
 
   logic [6:0] R_TYPE, LW, SW, BR;
 
@@ -32,10 +33,12 @@ module Controller (
 
   assign ALUSrc = (Opcode == LW || Opcode == SW || Opcode == I_TYPE);
   assign MemtoReg = (Opcode == LW);
-  assign RegWrite = (Opcode == R_TYPE || Opcode == LW || I_TYPE || JAL || JAL_R); // verificar se a instrucao vai escrever na memoria(usado na fowarding unit
+  assign RegWrite = (Opcode == R_TYPE || Opcode == LW || Opcode == I_TYPE || Opcode == JAL || Opcode == JAL_R); // verificar se a instrucao vai escrever na memoria(usado na fowarding unit
   assign MemRead = (Opcode == LW);
   assign MemWrite = (Opcode == SW);
-  assign ALUOp[0] = (Opcode == BR || JAL);
+  assign ALUOp[0] = (Opcode == BR || Opcode == JAL);
+  assign MUX_final[0] = (Opcode == LW || Opcode == JALR);
+  assign MUX_final[1] = (Opcode == JAL || Opcode == BR || Opcode == JAl_R);
   assign ALUOp[1] = (Opcode == R_TYPE || I_TYPE || JAL);
-  assign Branch = (Opcode == BR);
+  assign Branch = (Opcode == BR || JAL);
 endmodule
