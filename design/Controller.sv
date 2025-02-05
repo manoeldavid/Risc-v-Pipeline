@@ -25,13 +25,17 @@ module Controller (
   assign LW = 7'b0000011;  //lw
   assign SW = 7'b0100011;  //sw
   assign BR = 7'b1100011;  //beq
+  assign I_TYPE = 7'b0010011; // addi, andi, ori, slti
+  assign JAL = 7'b1101111 // JAL
+  assign JAL_R = 7'b1100111 // JAL_R
+  
 
-  assign ALUSrc = (Opcode == LW || Opcode == SW);
+  assign ALUSrc = (Opcode == LW || Opcode == SW || Opcode == I_TYPE);
   assign MemtoReg = (Opcode == LW);
-  assign RegWrite = (Opcode == R_TYPE || Opcode == LW);
+  assign RegWrite = (Opcode == R_TYPE || Opcode == LW || I_TYPE || JAL || JAL_R); // verificar se a instrucao vai escrever na memoria(usado na fowarding unit
   assign MemRead = (Opcode == LW);
   assign MemWrite = (Opcode == SW);
-  assign ALUOp[0] = (Opcode == BR);
-  assign ALUOp[1] = (Opcode == R_TYPE);
+  assign ALUOp[0] = (Opcode == BR || JAL);
+  assign ALUOp[1] = (Opcode == R_TYPE || I_TYPE || JAL);
   assign Branch = (Opcode == BR);
 endmodule
