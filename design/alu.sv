@@ -19,7 +19,7 @@ module alu#(
                     ALUResult = SrcA & SrcB;
 	    4'b0001:	    // OR
 	            ALUResult = SrA | SrcB;
-            4'b0010:        // ADD || LW/SW
+            4'b0010:        // ADD || LW/SW || JALR
                     ALUResult = $signed(SrcA) + $signed(SrcB);
 	    4'b0011:	    // SUB
 		    ALUResult = $signed(SrcA) - $signed(SrcB);
