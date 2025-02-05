@@ -53,6 +53,7 @@ module riscv #(
       MemWrite,
       MemRead,
       Branch,
+      MUX_final,
       ALUop,
       Operation,
       opcode,
