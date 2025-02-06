@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 module Controller (
     //Input
     input logic [6:0] Opcode,
@@ -16,8 +14,8 @@ module Controller (
     output logic MemRead,  //Data memory contents designated by the address input are put on the Read data output
     output logic MemWrite, //Data memory contents designated by the address input are replaced by the value on the Write data input.
     output logic [1:0] ALUOp,  //00: LW/SW; 01:Branch; 10: Rtype
-    output logic Branch  //0: branch is not taken; 1: branch is taken
-    output logic MUX_final[1:0]; // 00-> Escreve no reg(ou mem) o resultado da ALU, 01-> LW, LH, LB, 10-> JAL, Branch, 11-> JALR
+    output logic Branch,  //0: branch is not taken; 1: branch is taken
+    output logic [1:0] MUX_final // 00-> Escreve no reg(ou mem) o resultado da ALU, 01-> LW, LH, LB, 10-> JAL, Branch, 11-> JALR
 ); 
 
   logic [6:0] R_TYPE, I_TYPE, LW, SW, BR, JAL, JALR;
@@ -27,8 +25,8 @@ module Controller (
   assign SW = 7'b0100011;  //sw
   assign BR = 7'b1100011;  //beq
   assign I_TYPE = 7'b0010011; // addi, andi, ori, slti
-  assign JAL = 7'b1101111 // JAL
-  assign JALR = 7'b1100111 // JAL_R
+  assign JAL = 7'b1101111; // JAL
+  assign JALR = 7'b1100111; // JAL_R
   
 
   assign ALUSrc = (Opcode == LW || Opcode == SW || Opcode == I_TYPE);
@@ -38,7 +36,7 @@ module Controller (
   assign MemWrite = (Opcode == SW);
   assign ALUOp[0] = (Opcode == BR || Opcode == JAL);
   assign MUX_final[0] = (Opcode == LW || Opcode == JALR);
-  assign MUX_final[1] = (Opcode == JAL || Opcode == BR || Opcode == JAlR);
+  assign MUX_final[1] = (Opcode == JAL || Opcode == BR || Opcode == JALR);
   assign ALUOp[1] = (Opcode == R_TYPE || I_TYPE || JAL);
-  assign Branch = (Opcode == BR || JAL);
+  assign Branch = (Opcode == BR || JAL || JALR);
 endmodule
