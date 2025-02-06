@@ -13,7 +13,7 @@ module imm_Gen (
 
       7'b0010011: //*I-type (addi, slti, andi, etc
       begin
-      	if((inst_code[14:12] == 3'b001) || inst_code[14:12] == 3'b101) {
+      	if((inst_code[14:12] == 3'b001) || (inst_code[14:12] == 3'b101)) 
 	  	Imm_out = {7'b0, inst_code[24-20]}; // se for srai, srli, slli
       	else
       		Imm_out = {inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:20]};
