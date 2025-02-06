@@ -1,6 +1,7 @@
-`timescale 1ns / 1ps
+timescale 1ns / 1ps
 
 import Pipe_Buf_Reg_PKG::*;
+
 
 module Datapath #(
     parameter PC_W = 9,  // Program Counter
@@ -18,7 +19,7 @@ module Datapath #(
     MemWrite,  // Register file or Immediate MUX // Memroy Writing Enable
     MemRead,  // Memroy Reading Enable
     Branch,  // Branch Enable
-    input logic  [          1:0] MUX_final; // variavel que adicionei para fazer a verificacao do valor final a ser escrito(atribuicao se encontra no controller)
+    input logic  [          1:0] MUX_final,
     input  logic [          1:0] ALUOp,
     input  logic [ALU_CC_W -1:0] ALU_CC,         // ALU Control Code ( input of the ALU )
     output logic [          6:0] opcode,
@@ -84,6 +85,7 @@ module Datapath #(
       Instr
   );
 
+
   // IF_ID_Reg A;
   always @(posedge clk) begin
     if ((reset) || (PcSel))   // initialization or flush
@@ -143,7 +145,7 @@ module Datapath #(
       B.MemWrite <= 0;
       B.ALUOp <= 0;
       B.Branch <= 0;
-      MUX_final <= 0;
+      B.MUX_final <= 0;
       B.Curr_Pc <= 0;
       B.RD_One <= 0;
       B.RD_Two <= 0;
@@ -162,7 +164,7 @@ module Datapath #(
       B.MemWrite <= MemWrite;
       B.ALUOp <= ALUOp;
       B.Branch <= Branch;
-      MUX_final <= MUX_final;
+      B.MUX_final <= MUX_final;
       B.Curr_Pc <= A.Curr_Pc;
       B.RD_One <= Reg1;
       B.RD_Two <= Reg2;
