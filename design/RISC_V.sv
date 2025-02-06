@@ -6,7 +6,6 @@ module riscv #(
     input logic clk,
     reset,  // clock and reset signals
     output logic [31:0] WB_Data,  // The ALU_Result
-
     output logic [4:0] reg_num,
     output logic [31:0] reg_data,
     output logic reg_write_sig,
