@@ -1,4 +1,4 @@
-timescale 1ns / 1ps
+`timescale 1ns / 1ps
 
 import Pipe_Buf_Reg_PKG::*;
 
@@ -28,7 +28,9 @@ module Datapath #(
     output logic [          1:0] ALUOp_Current,
     output logic [   DATA_W-1:0] WB_Data,        //Result After the last MUX
 
-    // Para depuraÃ§Ã£o no tesbench:
+
+    // Para depuraÃ§Ã£o no tesbench:  //1: PC fetch same, Register not update
+
     output logic [4:0] reg_num,  //nÃºmero do registrador que foi escrito
     output logic [DATA_W-1:0] reg_data,  //valor que foi escrito no registrador
     output logic reg_write_sig,  //sinal de escrita no registrador
@@ -45,15 +47,17 @@ module Datapath #(
   logic [DATA_W-1:0] Reg1, Reg2;
   logic [DATA_W-1:0] PC_Temp;
   logic [DATA_W-1:0] ReadData;
-  logic [DATA_W-1:0] SrcB, ALUResult;
+  logic [DATA_W-1:0] ALUResult;
+  logic Pc_Sel;
+  logic Reg_Stall;
+  logic [DATA_W-1:0] SrcB;
   logic [DATA_W-1:0] ExtImm, BrImm, Old_PC_Four, BrPC;
   logic [DATA_W-1:0] WrmuxSrc;
-  logic PcSel;  // mux select / flush signal
+  // mux select / flush signal
   logic [1:0] FAmuxSel;
   logic [1:0] FBmuxSel;
   logic [DATA_W-1:0] FAmux_Result;
   logic [DATA_W-1:0] FBmux_Result;
-  logic Reg_Stall;  //1: PC fetch same, Register not update
 
   if_id_reg A;
   id_ex_reg B;
