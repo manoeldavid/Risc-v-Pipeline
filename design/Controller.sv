@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module Controller (
     //Input
     input logic [6:0] Opcode,
@@ -21,7 +23,7 @@ module Controller (
   logic [6:0] R_TYPE, I_TYPE, LW, SW, BR, JAL, JALR;
 
   assign R_TYPE = 7'b0110011;  //add,and
-  assign LW = 7'b0000011;  //lwj
+  assign LW = 7'b0000011;  //lw
   assign SW = 7'b0100011;  //sw
   assign BR = 7'b1100011;  //beq
   assign I_TYPE = 7'b0010011; // addi, andi, ori, slti
@@ -37,6 +39,7 @@ module Controller (
   assign ALUOp[0] = (Opcode == BR || Opcode == JAL);
   assign MUX_final[0] = (Opcode == LW || Opcode == JALR);
   assign MUX_final[1] = (Opcode == JAL || Opcode == BR || Opcode == JALR);
-  assign ALUOp[1] = (Opcode == R_TYPE || I_TYPE || JAL);
-  assign Branch = (Opcode == BR || JAL || JALR);
+  assign ALUOp[1] = (Opcode == R_TYPE || Opcode == I_TYPE || Opcode == JAL);
+  assign Branch = (Opcode == BR || Opcode == JAL || Opcode == JALR);
+  	
 endmodule
