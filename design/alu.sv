@@ -40,6 +40,8 @@ module alu#(
 		    ALUResult = SrcA ^ SrcB;
 	    4'b1110:	    // JAL
 	 	    ALUResult = 1; 
+            4'b0110:       // HALT(fim de execução)
+                    ALUResult = 0;
 	    4'b1111:	    // BGE
 		    ALUResult = ($signed(SrcA) > $signed(SrcB)) ? 1 : 0;
             default:

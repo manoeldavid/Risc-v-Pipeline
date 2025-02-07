@@ -11,6 +11,7 @@ package Pipe_Buf_Reg_PKG;
     logic        MemtoReg;
     logic        RegWrite;
     logic        MemRead;
+    logic        haltInsert; //variável que criamos pro halt
     logic        MemWrite;
     logic [1:0]  ALUOp;
     logic        Branch;
@@ -32,6 +33,7 @@ package Pipe_Buf_Reg_PKG;
     logic        RegWrite;
     logic        MemtoReg;
     logic        MemRead;
+    logic        haltInsert; //variável que criamos pro halt
     logic        MemWrite;
     logic [1:0]  MUX_final;
     logic [31:0] Pc_Imm;
@@ -49,6 +51,7 @@ package Pipe_Buf_Reg_PKG;
   typedef struct packed {
     logic        RegWrite;
     logic        MemtoReg;
+    logic        haltInsert; //variável que criamos pro halt
     logic [1:0]  MUX_final;
     logic [31:0] Pc_Imm;
     logic [31:0] Pc_Four;

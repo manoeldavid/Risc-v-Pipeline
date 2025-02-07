@@ -19,6 +19,7 @@ module Datapath #(
     MemWrite,  // Register file or Immediate MUX // Memroy Writing Enable
     MemRead,  // Memroy Reading Enable
     Branch,  // Branch Enable
+    haltInsert,  // variavel do halt
     input logic  [          1:0] MUX_final,
     input  logic [          1:0] ALUOp,
     input  logic [ALU_CC_W -1:0] ALU_CC,         // ALU Control Code ( input of the ALU )
@@ -149,6 +150,7 @@ module Datapath #(
       B.MemWrite <= 0;
       B.ALUOp <= 0;
       B.Branch <= 0;
+      B.haltInsert <= 0; //inicializa no módulo B a var do halt
       B.MUX_final <= 0;
       B.Curr_Pc <= 0;
       B.RD_One <= 0;
@@ -168,6 +170,7 @@ module Datapath #(
       B.MemWrite <= MemWrite;
       B.ALUOp <= ALUOp;
       B.Branch <= Branch;
+      B.haltInsert <= haltInsert; //passa a variável do halt para o módulo B
       B.MUX_final <= MUX_final;
       B.Curr_Pc <= A.Curr_Pc;
       B.RD_One <= Reg1;
@@ -246,6 +249,7 @@ module Datapath #(
       C.MemtoReg <= 0;
       C.MemRead <= 0;
       C.MemWrite <= 0;
+      C.haltInsert <= 0; //inicializa no módulo C a var do halt
       C.MUX_final <= 0;
       C.Pc_Imm <= 0;
       C.Pc_Four <= 0;
@@ -259,6 +263,7 @@ module Datapath #(
       C.RegWrite <= B.RegWrite;
       C.MemtoReg <= B.MemtoReg;
       C.MemRead <= B.MemRead;
+      C.haltInsert <= B.haltInsert; //integra a variavel do mod c com a do modulo b
       C.MemWrite <= B.MemWrite;
       C.MUX_final <= B.MUX_final;
       C.Pc_Imm <= BrImm;
@@ -296,6 +301,7 @@ module Datapath #(
         begin
       D.RegWrite <= 0;
       D.MemtoReg <= 0;
+      D.haltInsert <= 0; //inicializa no módulo D a var do halt
       D.MUX_final <= 0;
       D.Pc_Imm <= 0;
       D.Pc_Four <= 0;
@@ -306,6 +312,7 @@ module Datapath #(
     end else begin
       D.RegWrite <= C.RegWrite;
       D.MemtoReg <= C.MemtoReg;
+      D.haltInsert <= C.haltInsert; //integra a variavel do mod d com a do modulo c
       D.MUX_final <= C.MUX_final;
       D.Pc_Imm <= C.Pc_Imm;
       D.Pc_Four <= C.Pc_Four;
