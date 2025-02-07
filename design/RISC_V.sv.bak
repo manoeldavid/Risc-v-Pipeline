@@ -35,7 +35,7 @@ module riscv #(
       MemWrite,
       ALUop,
       Branch,
-      haltInsert,
+      haltInsert
       MUX_final
   );
 
