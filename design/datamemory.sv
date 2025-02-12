@@ -36,12 +36,12 @@ module datamemory #(
 
     if (MemRead) begin
       case (Funct3)
-        3'b000: begin// LB
+        3'b000: begin // LB
           if (Dataout[31] == 1) rd <= -1;
           else rd <= 0;
           rd[7:0] <= Dataout[7:0];
         end
-        3'b001: begin// LH
+        3'b001: begin // LH
           if (Dataout[31] == 1) rd <= -1;
           else rd <= 0;
           rd[15:0] <= Dataout[15:0];
@@ -54,9 +54,22 @@ module datamemory #(
       endcase
     end else if (MemWrite) begin
       case (Funct3)
-        3'b010: begin  //SW
+        3'b010: begin // SW
           Wr <= 4'b1111;
           Datain <= wd;
+        end
+        3'b001: begin // SH
+          Wr <= (a[1] ? 4'b1100 : 4'b0011); //Definindo quais bytes serão escritos de acordo com o bit de alinhamento do endereço
+          Datain <= (a[1] ? {wd[15:0], 16'b0} : {16'b0, wd[15:0]}); //Poscionando os 16 bits de wd de acordo com o bit de alinhamento - Garantir que os dados estejam no lugar correto
+        end
+        3'b000: begin // SB
+          case (a[1:0])
+            2'b00: Wr <= 4'b0001; //Escreve no byte menos significativo
+            2'b01: Wr <= 4'b0010; //Escreve no segundo byte
+            2'b10: Wr <= 4'b0100; //Escreve no terceiro byte
+            2'b11: Wr <= 4'b1000; //Escreve no byte mais significativo
+          endcase
+          Datain <= {4{wd[7:0]}}; //Expandindo wd{7:0} para 32 bits 
         end
         default: begin
           Wr <= 4'b1111;
@@ -67,3 +80,4 @@ module datamemory #(
   end
 
 endmodule
+
