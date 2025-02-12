@@ -17,11 +17,11 @@ module Controller (
     output logic MemWrite, //Data memory contents designated by the address input are replaced by the value on the Write data input.
     output logic [1:0] ALUOp,  //00: LW/SW; 01:Branch; 10: Rtype
     output logic Branch,  //0: branch is not taken; 1: branch is taken
-    output logic haltInsert, //sinal que indica o halt(fim de execução)
-    output logic [1:0] MUX_final // 00-> Escreve no reg(ou mem) o resultado da ALU, 01-> LW, LH, LB, 10-> JAL, Branch, 11-> JALR
+    output logic [1:0] MUX_final, // 00-> Escreve no reg(ou mem) o resultado da ALU, 01-> LW, LH, LB, 10-> JAL, Branch, 11-> JALR
+    output logic Halt_Insert
 ); 
 
-  logic [6:0] R_TYPE, I_TYPE, LW, SW, BR, JAL, JALR;
+  logic [6:0] R_TYPE, I_TYPE, LW, SW, BR, JAL, JALR, HALT;
 
   assign R_TYPE = 7'b0110011;  //add,and
   assign LW = 7'b0000011;  //lw
@@ -30,10 +30,10 @@ module Controller (
   assign I_TYPE = 7'b0010011; // addi, andi, ori, slti
   assign JAL = 7'b1101111; // JAL
   assign JALR = 7'b1100111; // JAL_R
-  assign HALT = 7'b1001100; // opcode do HALT
+  assign HALT = 7'b1111111;
   
 
-  assign ALUSrc = (Opcode == LW || Opcode == SW || Opcode == I_TYPE);
+  assign ALUSrc = (Opcode == LW || Opcode == SW || Opcode == I_TYPE || Opcode == JALR);
   assign MemtoReg = (Opcode == LW);
   assign RegWrite = (Opcode == R_TYPE || Opcode == LW || Opcode == I_TYPE || Opcode == JAL || Opcode == JALR); // verificar se a instrucao vai escrever na memoria(usado na fowarding unit
   assign MemRead = (Opcode == LW);
@@ -43,5 +43,6 @@ module Controller (
   assign MUX_final[1] = (Opcode == JAL || Opcode == BR || Opcode == JALR);
   assign ALUOp[1] = (Opcode == R_TYPE || Opcode == I_TYPE || Opcode == JAL);
   assign Branch = (Opcode == BR || Opcode == JAL || Opcode == JALR);
-  assign haltInsert = (Opcode == HALT);
+  assign Halt_Insert = (Opcode == HALT);
+  	
 endmodule
